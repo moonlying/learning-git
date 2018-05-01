@@ -1,0 +1,75 @@
+md 创建空目录
+cd.. 后退（有时候要空格一下）
+pwd 显示当前路径
+
+git init 将新目录变成Git可以管理的repository
+将新编写的txt放到目录（或子目录）下，即该repository下
+
+git add 把文件添加到仓库
+git commit -m "xxx" 提交上去 -m后面可以添加注释
+git add 可以添加多次后，一次用commit 来提交
+
+git status 可以查看状态包括是否更改等等
+git diff 可以查看具体更改了哪些内容
+
+git log 可以查看日志
+git log --pretty=oneline 可以查看commit id 一般数字很长只用前几位就好，系统可以自动匹配
+git 中用HEAD表示当前版本，HEAD^是上个版本，HEAD^^是上上个版本，HEAD~100是前一百个版本
+git reset --hard HEAD^ 回到上一个版本
+git reflog 可以用来记录你的每一次命令，即便是关机以后重来
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+
+搞清楚工作区，暂存区，分支的概念。
+工作区修改，git add 到暂存区，可以add很多，然后一次commit到分支。
+
+git checkout -- filename 把文件在工作区的修改全部撤销
+git reset HEAD filename命令即可以回退版本，也可以把暂存区的修改回退到工作区
+rm 用于删除文件，git rm 用于从工作区中删除文件，commit之后就是从分支上删除了
+
+要关联一个远程库，使用命令git remote add origin git@server-name:path/repo-name.git；
+关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
+
+要克隆一个仓库，首先必须知道仓库的地址，然后使用git clone命令克隆。（git clone git@github.com:michaelliao/gitskills.git）
+Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快。
+
+git checkout -b dev 表示创建并切换dev分支
+git branch 查看当前分支带*的是当前分支
+git merge dev 工作成果合并
+git checkout filename 切换分支
+git branch filename 创建分支
+git branch -d filename  删除分支
+
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+用git log --graph命令可以看到分支合并图。
+
+在实际开发中，我们应该按照几个基本原则进行分支管理：
+首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+
+修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
+当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
+
+开发一个新feature，最好新建一个分支；
+如果要丢弃一个没有被合并过的分支，可以通过git branch -D <name>强行删除。
+
+查看远程库信息，使用git remote -v；
+本地新建的分支如果不推送到远程，对其他人就是不可见的；
+从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+
+命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
+命令git tag可以查看所有标签。
+
+命令git push origin <tagname>可以推送一个本地标签；
+命令git push origin --tags可以推送全部未推送过的本地标签；
+命令git tag -d <tagname>可以删除一个本地标签；
+命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+
+git config --global alias. xx xxxxx 配置别名
